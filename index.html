@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banner Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            padding: 20px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .controls {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            flex: 1;
+            min-width: 200px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .banner-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .banner-slot {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 2px dashed #dee2e6;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .banner-slot:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+        
+        .banner-slot.filled {
+            border-style: solid;
+            border-color: #28a745;
+        }
+        
+        .banner-content {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .banner-preview {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            overflow: hidden;
+        }
+        
+        .banner-info {
+            margin-top: 10px;
+        }
+        
+        .slot-number {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .banner-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-add {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        
+        .empty-message {
+            color: #6c757d;
+            font-style: italic;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .banner-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-item {
+                min-width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .banner-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .banner-slot {
+                min-height: 180px;
+                padding: 15px;
+            }
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        /* Animation for banners */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .banner-slot {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Banner Management System</h1>
+            <p>Manage and customize your 20 banner slots efficiently</p>
+        </div>
+        
+        <div class="controls">
+            <div class="stats">
+                <div class="stat-item">
+                    <h3>Total Slots</h3>
+                    <p class="stat-value">20</p>
+                </div>
+                <div class="stat-item">
+                    <h3>Available</h3>
+                    <p id="available-slots" class="stat-value">20</p>
+                </div>
+                <div class="stat-item">
+                    <h3>In Use</h3>
+                    <p id="used-slots" class="stat-value">0</p>
+                </div>
+            </div>
+            
+            <div class="control-buttons">
+                <button class="btn btn-add" onclick="addSampleBanners()">
+                    Add Sample Banners
+                </button>
+                <button class="btn btn-remove" onclick="clearAllBanners()">
+                    Clear All Banners
+                </button>
+            </div>
+        </div>
+        
+        <div id="bannerContainer" class="banner-grid">
+            <!-- Banners will be dynamically generated here -->
+        </div>
+    </div>
+    
+    <div id="bannerModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add Banner</h2>
+            <div id="modalBody">
+                <!-- Modal content will be inserted here -->
+            </div>
+            <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-add" onclick="saveBanner()">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Banner data structure
+        let banners = Array(20).fill(null).map((_, index) => ({
+            id: index + 1,
+            title: '',
+            content: '',
+            type: 'static',
+            filled: false,
+            backgroundColor: '#667eea',
+            textColor: '#ffffff'
+        }));
+        
+        let currentEditingSlot = null;
+        
+        // Initialize the grid
+        function initializeGrid() {
+            const container = document.getElementById('bannerContainer');
+            container.innerHTML = '';
+            
+            banners.forEach((banner, index) => {
+                const bannerElement = createBannerElement(banner, index);
+                container.appendChild(bannerElement);
+            });
+            
+            updateStats();
+        }
+        
+        // Create banner element
+        function createBannerElement(banner, index) {
+            const slot = document.createElement('div');
+            slot.className = `banner-slot ${banner.filled ? 'filled' : ''}`;
+            slot.dataset.index = index;
+            
+            const slotNumber = document.createElement('div');
+            slotNumber.className = 'slot-number';
+            slotNumber.textContent = index + 1;
+            
+            const content = document.createElement('div');
+            content.className = 'banner-content';
+            
+            if (banner.filled) {
+                const preview = document.createElement('div');
+                preview.className = 'banner-preview';
+                preview.style.background = banner.backgroundColor;
+                preview.innerHTML = `<div style="color: ${banner.textColor}">${banner.title || 'Banner'}</div>`;
+                
+                const info = document.createElement('div');
+                info.className = 'banner-info';
+                info.innerHTML = `
+                    <h4>${banner.title || 'Untitled Banner'}</h4>
+                    <p>Type: ${banner.type}</p>
+                    <small>Click to edit</small>
+                `;
+                
+                const actions = document.createElement('div');
+                actions.className = 'banner-actions';
+                actions.innerHTML = `
+                    <button class="btn btn-remove" onclick="removeBanner(${index})">Remove</button>
+                    <button class="btn" onclick="editBanner(${index})">Edit</button>
+                `;
+                
+                content.appendChild(preview);
+                content.appendChild(info);
+                content.appendChild(actions);
+            } else {
+                content.innerHTML = `
+                    <div class="empty-message">
+                        <h3>Empty Slot</h3>
+                        <p>Click to add a banner</p>
+                        <button class="btn btn-add" onclick="addBanner(${index})" style="margin-top: 10px;">
+                            Add Banner
+                        </button>
+                    </div>
+                `;
+            }
+            
+            slot.appendChild(slotNumber);
+            slot.appendChild(content);
+            
+            // Add click handler for the whole slot
+            slot.addEventListener('click', (e) => {
+                if (!e.target.closest('.banner-actions') && !e.target.classList.contains('btn')) {
+                    if (banner.filled) {
+                        editBanner(index);
+                    } else {
+                        addBanner(index);
+                    }
+                }
+            });
+            
+            return slot;
+        }
+        
+        // Add banner to slot
+        function addBanner(index) {
+            currentEditingSlot = index;
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = 'Add New Banner';
+            modalBody.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div>
+                        <label>Banner Title:</label>
+                        <input type="text" id="bannerTitle" class="form-control" placeholder="Enter banner title">
+                    </div>
+                    <div>
+                        <label>Banner Type:</label>
+                        <select id="bannerType" class="form-control">
+                            <option value="static">Static Banner[citation:2]</option>
+                            <option value="animated">Animated Banner[citation:2]</option>
+                            <option value="expandable">Expandable Ad[citation:2]</option>
+                            <option value="video">Video Banner[citation:2]</option>
+                            <option value="leaderboard">Leaderboard[citation:5]</option>
+                            <option value="rectangle">Medium Rectangle[citation:5]</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Background Color:</label>
+                        <input type="color" id="bannerBgColor" value="#667eea">
+                    </div>
+                    <div>
+                        <label>Text Color:</label>
+                        <input type="color" id="bannerTextColor" value="#ffffff">
+                    </div>
+                    <div>
+                        <label>Preview:</label>
+                        <div id="colorPreview" style="height: 60px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-top: 10px; background: #667eea; color: #ffffff;">
+                            Preview Text
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners for color preview
+            const bgColorInput = document.getElementById('bannerBgColor');
+            const textColorInput = document.getElementById('bannerTextColor');
+            const preview = document.getElementById('colorPreview');
+            
+            const updatePreview = () => {
+                preview.style.background = bgColorInput.value;
+                preview.style.color = textColorInput.value;
+            };
+            
+            bgColorInput.addEventListener('input', updatePreview);
+            textColorInput.addEventListener('input', updatePreview);
+            
+            document.getElementById('bannerModal').classList.add('show');
+        }
+        
+        // Edit existing banner
+        function editBanner(index) {
+            currentEditingSlot = index;
+            const banner = banners[index];
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = 'Edit Banner';
+            modalBody.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div>
+                        <label>Banner Title:</label>
+                        <input type="text" id="bannerTitle" class="form-control" value="${banner.title}" placeholder="Enter banner title">
+                    </div>
+                    <div>
+                        <label>Banner Type:</label>
+                        <select id="bannerType" class="form-control">
+                            <option value="static" ${banner.type === 'static' ? 'selected' : ''}>Static Banner</option>
+                            <option value="animated" ${banner.type === 'animated' ? 'selected' : ''}>Animated Banner</option>
+                            <option value="expandable" ${banner.type === 'expandable' ? 'selected' : ''}>Expandable Ad</option>
+                            <option value="video" ${banner.type === 'video' ? 'selected' : ''}>Video Banner</option>
+                            <option value="leaderboard" ${banner.type === 'leaderboard' ? 'selected' : ''}>Leaderboard</option>
+                            <option value="rectangle" ${banner.type === 'rectangle' ? 'selected' : ''}>Medium Rectangle</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Background Color:</label>
+                        <input type="color" id="bannerBgColor" value="${banner.backgroundColor}">
+                    </div>
+                    <div>
+                        <label>Text Color:</label>
+                        <input type="color" id="bannerTextColor" value="${banner.textColor}">
+                    </div>
+                    <div>
+                        <label>Preview:</label>
+                        <div id="colorPreview" style="height: 60px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-top: 10px; background: ${banner.backgroundColor}; color: ${banner.textColor};">
+                            ${banner.title || 'Preview Text'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners for color preview
+            const bgColorInput = document.getElementById('bannerBgColor');
+            const textColorInput = document.getElementById('bannerTextColor');
+            const titleInput = document.getElementById('bannerTitle');
+            const preview = document.getElementById('colorPreview');
+            
+            const updatePreview = () => {
+                preview.style.background = bgColorInput.value;
+                preview.style.color = textColorInput.value;
+                preview.textContent = titleInput.value || 'Preview Text';
+            };
+            
+            bgColorInput.addEventListener('input', updatePreview);
+            textColorInput.addEventListener('input', updatePreview);
+            titleInput.addEventListener('input', updatePreview);
+            
+            document.getElementById('bannerModal').classList.add('show');
+        }
+        
+        // Save banner changes
+        function saveBanner() {
+            if (currentEditingSlot === null) return;
+            
+            const title = document.getElementById('bannerTitle').value;
+            const type = document.getElementById('bannerType').value;
+            const bgColor = document.getElementById('bannerBgColor').value;
+            const textColor = document.getElementById('bannerTextColor').value;
+            
+            banners[currentEditingSlot] = {
+                ...banners[currentEditingSlot],
+                title,
+                type,
+                backgroundColor: bgColor,
+                textColor,
+                filled: true
+            };
+            
+            closeModal();
+            initializeGrid();
+        }
+        
+        // Remove banner from slot
+        function removeBanner(index) {
+            if (confirm('Are you sure you want to remove this banner?')) {
+                banners[index] = {
+                    id: index + 1,
+                    title: '',
+                    content: '',
+                    type: 'static',
+                    filled: false,
+                    backgroundColor: '#667eea',
+                    textColor: '#ffffff'
+                };
+                initializeGrid();
+            }
+        }
+        
+        // Add sample banners for demonstration
+        function addSampleBanners() {
+            const sampleBanners = [
+                { title: 'Summer Sale', type: 'animated', bgColor: '#FF6B6B', textColor: '#FFFFFF' },
+                { title: 'New Arrivals', type: 'static', bgColor: '#4ECDC4', textColor: '#292F36' },
+                { title: 'Limited Offer', type: 'video', bgColor: '#FFD166', textColor: '#073B4C' },
+                { title: 'Free Shipping', type: 'expandable', bgColor: '#118AB2', textColor: '#FFFFFF' },
+                { title: 'Premium Service', type: 'leaderboard', bgColor: '#06D6A0', textColor: '#073B4C' }
+            ];
+            
+            let added = 0;
+            banners.forEach((banner, index) => {
+                if (!banner.filled && added < sampleBanners.length) {
+                    const sample = sampleBanners[added];
+                    banners[index] = {
+                        ...banner,
+                        title: sample.title,
+                        type: sample.type,
+                        backgroundColor: sample.bgColor,
+                        textColor: sample.textColor,
+                        filled: true
+                    };
+                    added++;
+                }
+            });
+            
+            initializeGrid();
+        }
+        
+        // Clear all banners
+        function clearAllBanners() {
+            if (confirm('Are you sure you want to clear all banners?')) {
+                banners = banners.map((banner, index) => ({
+                    id: index + 1,
+                    title: '',
+                    content: '',
+                    type: 'static',
+                    filled: false,
+                    backgroundColor: '#667eea',
+                    textColor: '#ffffff'
+                }));
+                initializeGrid();
+            }
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const used = banners.filter(b => b.filled).length;
+            document.getElementById('used-slots').textContent = used;
+            document.getElementById('available-slots').textContent = banners.length - used;
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('bannerModal').classList.remove('show');
+            currentEditingSlot = null;
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeGrid();
+            
+            // Close modal on outside click
+            document.getElementById('bannerModal').addEventListener('click', (e) => {
+                if (e.target.id === 'bannerModal') {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
