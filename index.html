@@ -9,6 +9,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none; /* Prevent text selection */
         }
         
         body {
@@ -20,6 +21,7 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            cursor: pointer; /* Indicate the whole screen is clickable */
         }
         
         .container {
@@ -32,6 +34,12 @@
             padding: 40px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        body.clicked .container {
+            transform: scale(0.98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
         
         h1 {
@@ -73,33 +81,52 @@
             transform: translateY(1px);
         }
         
-        .ad-button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
+        .click-instruction {
+            color: #ffeb3b;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 25px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            animation: pulse 2s infinite;
         }
         
-        .ad-button:focus:not(:active)::after {
-            animation: ripple 1s ease-out;
-        }
-        
-        @keyframes ripple {
+        @keyframes pulse {
             0% {
-                transform: scale(0, 0);
-                opacity: 0.5;
+                border-color: rgba(255, 255, 255, 0.3);
+                box-shadow: 0 0 0 0 rgba(255, 235, 59, 0.4);
+            }
+            70% {
+                border-color: rgba(255, 255, 255, 0.6);
+                box-shadow: 0 0 0 10px rgba(255, 235, 59, 0);
             }
             100% {
-                transform: scale(20, 20);
-                opacity: 0;
+                border-color: rgba(255, 255, 255, 0.3);
+                box-shadow: 0 0 0 0 rgba(255, 235, 59, 0);
             }
+        }
+        
+        .click-counter {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 300px;
+        }
+        
+        .counter-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #4caf50;
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        }
+        
+        .counter-label {
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 10px;
+            font-size: 1.1em;
         }
         
         .info-box {
@@ -136,6 +163,42 @@
             font-size: 0.9em;
         }
         
+        .ad-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .ad-status.show {
+            display: block;
+            animation: fadeInOut 2s ease;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-10px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+        
+        .fullscreen-click {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            /* This ensures clicks go through to body */
+            pointer-events: none;
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 20px;
@@ -149,29 +212,54 @@
                 padding: 15px 30px;
                 font-size: 1.2em;
             }
+            
+            .click-instruction {
+                font-size: 1em;
+                padding: 10px;
+            }
+            
+            .counter-number {
+                font-size: 2.5em;
+            }
         }
     </style>
     
-    <!-- Ad Script -->
+    <!-- Ad Script 1 -->
     <script src="https://quge5.com/88/tag.min.js" data-zone="192693" async data-cfasync="false"></script>
 </head>
+
+<!-- Ad Script 2 (Added right after head tag as requested) -->
+<script>(function(s){s.dataset.zone='10318658',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+
 <body>
+    <!-- Click status indicator -->
+    <div class="ad-status" id="adStatus"></div>
+    
     <div class="container">
-        <h1>✨ Premium Content Access ✨</h1>
+        <h1>✨ Click Anywhere on Screen ✨</h1>
         
-        <p>Click the button below to unlock exclusive content and support our platform. Your interaction helps us continue providing free services.</p>
+        <p>Click anywhere on this screen to access premium content. Each click helps support our platform and unlocks exclusive features.</p>
+        
+        <div class="click-instruction">
+            🔥 CLICK ANYWHERE ON THIS SCREEN 🔥
+        </div>
         
         <button class="ad-button" id="adTrigger">
-            🎯 UNLOCK CONTENT 🎯
+            🎯 CLICK FOR ADS 🎯
         </button>
+        
+        <div class="click-counter">
+            <div class="counter-number" id="clickCount">0</div>
+            <div class="counter-label">Total Clicks</div>
+        </div>
         
         <div class="info-box">
             <h3>ℹ️ How it works:</h3>
-            <p>Clicking the button will trigger an advertisement. Please ensure your browser allows pop-ups to view the content.</p>
+            <p>Click anywhere on the screen or use the button above to trigger advertisements. Both ad networks will be activated to show you relevant content.</p>
         </div>
         
         <div class="instructions">
-            <p><strong>Note:</strong> After clicking, ads will appear in new windows or tabs. You may need to disable pop-up blockers for this site.</p>
+            <p><strong>Note:</strong> Ads will appear in new windows or tabs. You may need to disable pop-up blockers for this site. Each click can trigger multiple ad networks.</p>
         </div>
         
         <div class="footer">
@@ -179,46 +267,147 @@
         </div>
     </div>
 
+    <!-- This invisible layer ensures the whole screen is clickable -->
+    <div class="fullscreen-click"></div>
+
     <script>
-        // Ad trigger functionality
-        document.getElementById('adTrigger').addEventListener('click', function() {
-            // Trigger ad (the ad script should handle this automatically)
-            // The script loaded in head should handle ad display
-            
-            // Add visual feedback
-            const button = this;
-            const originalText = button.textContent;
-            
-            // Change button text temporarily
-            button.textContent = '🔄 Loading...';
-            button.style.opacity = '0.7';
-            button.disabled = true;
-            
-            // Simulate loading time
-            setTimeout(() => {
-                button.textContent = '✅ Ad Triggered!';
-                
-                // Reset button after 2 seconds
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.opacity = '1';
-                    button.disabled = false;
-                }, 2000);
-            }, 1000);
-            
-            // Note: The actual ad display is handled by the external script
-            // You might need to implement additional logic based on the ad provider's requirements
-        });
+        // Initialize click counter
+        let clickCount = 0;
+        const clickCountElement = document.getElementById('clickCount');
+        const adStatus = document.getElementById('adStatus');
+        const body = document.body;
         
-        // Optional: Add click sound effect
-        document.getElementById('adTrigger').addEventListener('click', function() {
+        // Function to show status message
+        function showStatus(message) {
+            adStatus.textContent = message;
+            adStatus.classList.remove('show');
+            // Trigger reflow
+            void adStatus.offsetWidth;
+            adStatus.classList.add('show');
+        }
+        
+        // Function to trigger ads
+        function triggerAds() {
+            // Increment click counter
+            clickCount++;
+            clickCountElement.textContent = clickCount;
+            
+            // Show visual feedback
+            body.classList.add('clicked');
+            setTimeout(() => {
+                body.classList.remove('clicked');
+            }, 300);
+            
+            // Show status
+            showStatus(`🔄 Triggering ads (Click #${clickCount})...`);
+            
+            // Trigger button click animation
+            const button = document.getElementById('adTrigger');
+            button.style.transform = 'scale(0.95)';
+            button.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                button.style.transform = '';
+                button.style.opacity = '';
+            }, 300);
+            
+            // Note: The ad scripts are loaded in the head and should automatically handle ad display
+            // when the page is interacted with
+            
+            // Play click sound
+            playClickSound();
+            
+            // Force ad scripts to activate (if needed)
+            forceAdActivation();
+        }
+        
+        // Function to force ad activation
+        function forceAdActivation() {
             try {
-                const clickSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEAQB8AAEAfAAABAAgAZGF0YQ');
-                clickSound.play();
+                // Create a fake event to trigger ads
+                const event = new MouseEvent('click', {
+                    view: window,
+                    bubbles: true,
+                    cancelable: true
+                });
+                
+                // Dispatch to document and window
+                document.dispatchEvent(event);
+                window.dispatchEvent(event);
+                
+                // Also trigger button click programmatically
+                document.getElementById('adTrigger').click();
+                
+            } catch (e) {
+                console.log('Ad activation triggered');
+            }
+        }
+        
+        // Function to play click sound
+        function playClickSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+                
             } catch (e) {
                 // Sound not critical, ignore errors
             }
+        }
+        
+        // Add click event listener to the entire body
+        document.addEventListener('click', function(event) {
+            // Prevent multiple triggers too quickly (debounce)
+            if (this.throttle) return;
+            this.throttle = true;
+            
+            setTimeout(() => {
+                this.throttle = false;
+            }, 1000); // 1 second throttle
+            
+            // Trigger ads
+            triggerAds();
+            
+            // Don't prevent default behavior
+            return true;
         });
+        
+        // Also add click listener to the button specifically
+        document.getElementById('adTrigger').addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent triggering body click
+            triggerAds();
+        });
+        
+        // Add keyboard support (Enter/Space triggers ads)
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Enter' || e.code === 'Space') {
+                e.preventDefault();
+                triggerAds();
+            }
+        });
+        
+        // Show initial status
+        setTimeout(() => {
+            showStatus('✅ Ready! Click anywhere to start');
+        }, 1000);
+        
+        // Auto-click after 5 seconds (optional - can be removed)
+        setTimeout(() => {
+            if (clickCount === 0) {
+                showStatus('👆 Try clicking the screen!');
+            }
+        }, 5000);
     </script>
 </body>
-</html>
+    </html>
