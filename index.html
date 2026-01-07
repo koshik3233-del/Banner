@@ -1,1263 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Win ₹100 Cash Prize - Share with Friends</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creator Booster Pro</title>
+  <style>
+    /* --- New Vibrant Color Palette --- */
+    :root {
+      --primary: #4776E6;
+      --primary-grad: linear-gradient(135deg, #4776E6 0%, #8E54E9 100%);
+      --secondary: #00b09b; 
+      --success: #28a745;
+      --bg-grad: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      --card-bg: #ffffff;
+      --text: #333;
+      --text-muted: #666;
+      --border: #e1e5eb;
+    }
+
+    body.dark-mode {
+      --primary: #5a8dee;
+      --primary-grad: linear-gradient(135deg, #3ab5e8 0%, #6b4ce6 100%);
+      --secondary: #33c3f0;
+      --success: #4cd964;
+      --bg-grad: linear-gradient(135deg, #232526 0%, #414345 100%);
+      --card-bg: #1e1e1e;
+      --text: #e0e0e0;
+      --text-muted: #aaa;
+      --border: #333;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-grad);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      width: 100%;
+      max-width: 420px;
+      padding: 20px;
+    }
+
+    /* Header & Profile */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+    }
     
-    <!-- External Script Added Right Before Closing Head Tag -->
-    <script src="https://fibredelivery.com/fb/b3/7e/fbb37e0bfc6f281ca395ea01a51826de.js"></script>
+    .profile-info h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      background: var(--primary-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .profile-info span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .theme-toggle:hover {
+        background: var(--primary);
+        color: var(--card-bg);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);
+      text-align: center;
+      transition: background 0.3s, box-shadow 0.3s;
+      border: 1px solid var(--border);
+    }
+
+    .card h3 {
+        margin-top: 0;
+        color: var(--text);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .stat-box {
+      background: var(--card-bg);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    }
+    .stat-box::before {
+        content: ''; position: absolute; top:0; left:0; width: 100%; height: 4px;
+    }
+    .stat-box.status::before { background: var(--success); }
+    .stat-box.status .stat-number { color: var(--success); }
     
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        :root {
-            --primary-color: #FF5722;
-            --secondary-color: #2196F3;
-            --success-color: #4CAF50;
-            --warning-color: #FF9800;
-            --background-gradient: linear-gradient(135deg, #1a237e 0%, #311b92 100%);
-            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        body {
-            background: var(--background-gradient);
-            color: #333;
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        /* Prompt Modal Styles */
-        .prompt-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .prompt-container {
-            background: white;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 500px;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.4s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .prompt-header {
-            background: linear-gradient(to right, var(--primary-color), #FF9800);
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
-        
-        .prompt-header i {
-            font-size: 4rem;
-            margin-bottom: 15px;
-            display: block;
-        }
-        
-        .prompt-header h2 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-        
-        .prompt-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .prompt-body {
-            padding: 30px;
-        }
-        
-        .prompt-body p {
-            font-size: 1.3rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            color: #555;
-            text-align: center;
-        }
-        
-        .prompt-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .prompt-btn {
-            flex: 1;
-            padding: 18px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .prompt-btn i {
-            margin-right: 10px;
-            font-size: 1.3rem;
-        }
-        
-        .prompt-btn.accept {
-            background: linear-gradient(to right, var(--success-color), #8BC34A);
-            color: white;
-            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
-        }
-        
-        .prompt-btn.accept:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(76, 175, 80, 0.5);
-        }
-        
-        .prompt-btn.decline {
-            background: #f5f5f5;
-            color: #666;
-            border: 2px solid #ddd;
-        }
-        
-        .prompt-btn.decline:hover {
-            background: #e0e0e0;
-        }
-        
-        .prompt-note {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f0f7ff;
-            border-radius: 10px;
-            border-left: 4px solid var(--secondary-color);
-            font-size: 1rem;
-            color: #666;
-        }
-        
-        .prompt-note i {
-            color: var(--secondary-color);
-            margin-right: 8px;
-        }
-        
-        /* App Container Styles */
-        .app-container {
-            max-width: 900px;
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.98);
-            border-radius: 25px;
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-            position: relative;
-            display: none; /* Hidden initially until prompt is accepted */
-        }
-        
-        /* App Header */
-        .app-header {
-            padding: 25px 30px;
-            background: linear-gradient(to right, var(--primary-color), #FF9800);
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .logo i {
-            font-size: 2rem;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .user-balance {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-        
-        /* Main Content */
-        .app-content {
-            padding: 20px;
-        }
-        
-        /* Prize Animation Section */
-        .prize-animation-container {
-            text-align: center;
-            padding: 40px 20px;
-            position: relative;
-            min-height: 350px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
-            border-radius: 20px;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-        
-        .win-text {
-            font-size: 7rem;
-            font-weight: 900;
-            color: #FFD700;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
-            margin-bottom: 10px;
-            animation: zoomInOut 2s infinite alternate;
-            position: relative;
-            z-index: 2;
-        }
-        
-        @keyframes zoomInOut {
-            0% {
-                transform: scale(1);
-                text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
-            }
-            100% {
-                transform: scale(1.3);
-                text-shadow: 0 0 50px rgba(255, 215, 0, 1), 0 0 80px rgba(255, 215, 0, 0.8);
-            }
-        }
-        
-        .prize-amount {
-            font-size: 5rem;
-            font-weight: 900;
-            color: var(--success-color);
-            text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
-            margin-top: -20px;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .prize-subtitle {
-            font-size: 1.5rem;
-            color: #555;
-            margin-top: 10px;
-            position: relative;
-            z-index: 2;
-        }
-        
-        /* Share Button Section */
-        .share-action-container {
-            text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .share-btn {
-            background: linear-gradient(to right, #25D366, #128C7E);
-            color: white;
-            border: none;
-            padding: 22px 60px;
-            font-size: 1.8rem;
-            font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 12px 30px rgba(37, 211, 102, 0.4);
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .share-btn:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 18px 35px rgba(37, 211, 102, 0.6);
-        }
-        
-        .share-btn:active {
-            transform: translateY(-3px);
-        }
-        
-        .share-btn i {
-            margin-right: 18px;
-            font-size: 2rem;
-        }
-        
-        .share-instructions {
-            background-color: #e8f4ff;
-            padding: 25px;
-            border-radius: 18px;
-            margin-top: 20px;
-            border-left: 6px solid var(--secondary-color);
-        }
-        
-        .share-instructions h3 {
-            color: var(--secondary-color);
-            margin-bottom: 18px;
-            font-size: 1.6rem;
-        }
-        
-        .share-instructions p {
-            font-size: 1.2rem;
-            line-height: 1.7;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .share-instructions p i {
-            margin-right: 12px;
-            color: var(--secondary-color);
-            margin-top: 3px;
-        }
-        
-        /* Progress Section */
-        .progress-container {
-            margin-top: 30px;
-            padding: 25px;
-            background-color: #f9f9f9;
-            border-radius: 18px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
-        
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .progress-header h3 {
-            color: var(--secondary-color);
-            font-size: 1.6rem;
-        }
-        
-        .friends-count {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--success-color);
-            background: white;
-            padding: 8px 20px;
-            border-radius: 50px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .progress-bar-container {
-            height: 35px;
-            background-color: #e0e0e0;
-            border-radius: 18px;
-            overflow: hidden;
-            margin-bottom: 25px;
-            position: relative;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(to right, #4CAF50, #8BC34A);
-            width: 0%;
-            border-radius: 18px;
-            transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 20px;
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        
-        .friends-visual {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-        
-        .friend-item {
-            text-align: center;
-            flex: 1;
-            padding: 15px 5px;
-            transition: all 0.3s ease;
-            opacity: 0.4;
-            transform: scale(0.9);
-        }
-        
-        .friend-item.active {
-            opacity: 1;
-            transform: scale(1);
-        }
-        
-        .friend-avatar {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #e0e0e0, #bdbdbd);
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: #757575;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .friend-item.active .friend-avatar {
-            background: linear-gradient(135deg, #4CAF50, #8BC34A);
-            color: white;
-            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
-        }
-        
-        .friend-name {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #555;
-        }
-        
-        /* Processing Section */
-        .processing-container {
-            padding: 40px 30px;
-            text-align: center;
-            background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
-            border-radius: 20px;
-            margin-top: 30px;
-            display: none;
-            animation: fadeIn 0.8s ease;
-        }
-        
-        .processing-icon {
-            font-size: 5rem;
-            color: var(--warning-color);
-            margin-bottom: 25px;
-            animation: spin 2s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .processing-title {
-            font-size: 2.2rem;
-            color: var(--warning-color);
-            margin-bottom: 15px;
-        }
-        
-        .processing-text {
-            font-size: 1.3rem;
-            color: #666;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-        
-        .processing-stats {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .stat-box {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            min-width: 180px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--success-color);
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 1.1rem;
-            color: #666;
-        }
-        
-        /* UPI Form Section */
-        .upi-container {
-            padding: 40px 30px;
-            background: white;
-            border-radius: 20px;
-            margin-top: 30px;
-            display: none;
-            animation: fadeIn 0.8s ease;
-        }
-        
-        .upi-header {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-        
-        .upi-title {
-            font-size: 2.5rem;
-            color: var(--secondary-color);
-            margin-bottom: 10px;
-        }
-        
-        .upi-subtitle {
-            font-size: 1.3rem;
-            color: #666;
-        }
-        
-        .upi-form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .form-group {
-            margin-bottom: 30px;
-        }
-        
-        .form-label {
-            display: block;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-            color: #333;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-        }
-        
-        .form-label i {
-            margin-right: 12px;
-            color: var(--secondary-color);
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 18px 20px;
-            font-size: 1.2rem;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            background: #f9f9f9;
-        }
-        
-        .form-input:focus {
-            border-color: var(--secondary-color);
-            outline: none;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
-        }
-        
-        .upi-examples {
-            font-size: 1rem;
-            color: #777;
-            margin-top: 8px;
-            margin-left: 35px;
-        }
-        
-        .submit-btn {
-            background: linear-gradient(to right, var(--primary-color), #FF9800);
-            color: white;
-            border: none;
-            padding: 22px 50px;
-            font-size: 1.6rem;
-            font-weight: 700;
-            border-radius: 50px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(255, 87, 34, 0.3);
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(255, 87, 34, 0.5);
-        }
-        
-        .submit-btn i {
-            margin-right: 15px;
-            font-size: 1.8rem;
-        }
-        
-        /* Success Section */
-        .success-container {
-            padding: 60px 30px;
-            text-align: center;
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            border-radius: 20px;
-            margin-top: 30px;
-            display: none;
-            animation: fadeIn 0.8s ease;
-        }
-        
-        .success-icon {
-            font-size: 6rem;
-            color: var(--success-color);
-            margin-bottom: 30px;
-            animation: bounce 1.5s infinite alternate;
-        }
-        
-        @keyframes bounce {
-            0% { transform: translateY(0) scale(1); }
-            100% { transform: translateY(-20px) scale(1.1); }
-        }
-        
-        .success-title {
-            font-size: 3.5rem;
-            color: var(--success-color);
-            margin-bottom: 20px;
-        }
-        
-        .success-message {
-            font-size: 1.5rem;
-            line-height: 1.7;
-            margin-bottom: 40px;
-            color: #333;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .timer-container {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            display: inline-block;
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .timer-title {
-            font-size: 1.3rem;
-            color: #666;
-            margin-bottom: 15px;
-        }
-        
-        .timer {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: var(--warning-color);
-            font-family: 'Courier New', monospace;
-        }
-        
-        /* Footer */
-        .app-footer {
-            text-align: center;
-            padding: 25px;
-            background-color: #f1f1f1;
-            color: #666;
-            font-size: 1rem;
-            border-top: 1px solid #ddd;
-            margin-top: 30px;
-        }
-        
-        /* App Navigation Dots */
-        .app-steps {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-            gap: 15px;
-        }
-        
-        .step-dot {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: #ddd;
-            transition: all 0.3s ease;
-        }
-        
-        .step-dot.active {
-            background: var(--secondary-color);
-            transform: scale(1.3);
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .app-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .win-text {
-                font-size: 5rem;
-            }
-            
-            .prize-amount {
-                font-size: 4rem;
-            }
-            
-            .share-btn {
-                padding: 20px 40px;
-                font-size: 1.6rem;
-                width: 100%;
-            }
-            
-            .friends-visual {
-                flex-wrap: wrap;
-                gap: 15px;
-            }
-            
-            .friend-item {
-                flex: 0 0 calc(50% - 15px);
-            }
-            
-            .processing-stats {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .success-title {
-                font-size: 2.8rem;
-            }
-            
-            .prompt-actions {
-                flex-direction: column;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .win-text {
-                font-size: 4rem;
-            }
-            
-            .prize-amount {
-                font-size: 3.2rem;
-            }
-            
-            .share-btn {
-                padding: 18px 30px;
-                font-size: 1.4rem;
-            }
-            
-            .friend-item {
-                flex: 0 0 100%;
-            }
-            
-            .upi-title {
-                font-size: 2rem;
-            }
-            
-            .success-title {
-                font-size: 2.2rem;
-            }
-            
-            .timer {
-                font-size: 2.2rem;
-            }
-            
-            .prompt-header h2 {
-                font-size: 1.8rem;
-            }
-        }
-    </style>
+    .stat-box.rate::before { background: var(--primary-grad); }
+    .stat-box.rate .stat-number { color: var(--primary); }
+
+    .stat-number {
+      font-weight: 800;
+      font-size: 1.3rem;
+      display: block;
+      margin-bottom: 5px;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* Form Elements */
+    input, select {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    input:focus, select:focus {
+        border-color: var(--primary);
+    }
+
+    /* Buttons */
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.2s;
+      color: white;
+    }
+    button:active { transform: scale(0.98); }
+
+    #increaseBtn {
+      background: var(--primary-grad);
+      box-shadow: 0 4px 15px -5px var(--primary);
+    }
+    #increaseBtn:hover { opacity: 0.95; }
+    #increaseBtn:disabled {
+      background: #999;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    #saveNameBtn {
+        background: var(--secondary);
+        margin-bottom: 0;
+    }
+    #saveNameBtn:hover { background: var(--primary); }
+
+    /* Animations & Utilities */
+    .loader {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      display: none;
+      margin-bottom: 20px;
+    }
+    .loader-bar {
+      height: 100%;
+      background: var(--primary-grad);
+      width: 0%;
+      transition: width 0.2s linear;
+      border-radius: 4px;
+    }
+
+    .success {
+      color: var(--success);
+      margin-top: 15px;
+      font-weight: bold;
+      background: rgba(40, 167, 69, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--success);
+    }
+
+    .timer {
+      margin-top: 15px;
+      color: #e74c3c;
+      font-size: 14px;
+      font-weight: 600;
+      background: rgba(231, 76, 60, 0.1);
+      padding: 10px;
+      border-radius: 8px;
+    }
+    
+    .settings-area { text-align: left; }
+    .settings-area label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      display: block;
+      margin-bottom: 8px;
+    }
+  </style>
 </head>
 <body>
-    <!-- Prompt Modal -->
-    <div class="prompt-overlay" id="promptOverlay">
-        <div class="prompt-container">
-            <div class="prompt-header">
-                <i class="fas fa-gift"></i>
-                <h2>Win ₹100 Cash Prize!</h2>
-                <p>Share with friends and claim your reward</p>
-            </div>
-            
-            <div class="prompt-body">
-                <p>🎉 <strong>Congratulations!</strong> You've been selected to participate in our special ₹100 cash giveaway!</p>
-                
-                <p>To claim your prize, simply share our link with 5 friends and ask them to click it. Once verified, you'll receive ₹100 directly to your UPI account within 24 hours!</p>
-                
-                <div class="prompt-note">
-                    <i class="fas fa-info-circle"></i>
-                    <span>No payment required. This is a 100% free promotional offer.</span>
-                </div>
-                
-                <div class="prompt-actions">
-                    <button class="prompt-btn accept" id="acceptPrompt">
-                        <i class="fas fa-check-circle"></i> Yes, I Want ₹100!
-                    </button>
-                    <button class="prompt-btn decline" id="declinePrompt">
-                        <i class="fas fa-times-circle"></i> No Thanks
-                    </button>
-                </div>
-            </div>
-        </div>
+
+  <div class="container">
+    <div class="header">
+      <div class="profile-info">
+        <h2 id="userNameDisplay">Welcome, Guest</h2>
+        <span>✨ Pro Plan Active</span>
+      </div>
+      <button class="theme-toggle" id="themeBtn">🌙 Dark</button>
     </div>
 
-    <!-- Main App Container (Hidden Initially) -->
-    <div class="app-container" id="appContainer">
-        <!-- App Header -->
-        <header class="app-header">
-            <div class="logo">
-                <i class="fas fa-gift"></i>
-                <span>Win ₹100 Cash</span>
-            </div>
-            <div class="user-info">
-                <div class="user-balance">
-                    <i class="fas fa-wallet"></i> Balance: ₹0
-                </div>
-                <div class="user-avatar">
-                    <i class="fas fa-user-circle" style="font-size: 2.5rem;"></i>
-                </div>
-            </div>
-        </header>
-        
-        <!-- App Content -->
-        <div class="app-content">
-            <!-- Step 1: Prize Animation -->
-            <section id="step1" class="prize-animation-container">
-                <div class="win-text">WIN</div>
-                <div class="prize-amount">₹100</div>
-                <div class="prize-subtitle">Cash Prize - Share with Friends to Claim!</div>
-                
-                <!-- Animated background elements -->
-                <div style="position: absolute; top: 10%; left: 5%; font-size: 3rem; color: rgba(255, 215, 0, 0.2); z-index: 1;">
-                    <i class="fas fa-rupee-sign"></i>
-                </div>
-                <div style="position: absolute; bottom: 15%; right: 10%; font-size: 4rem; color: rgba(76, 175, 80, 0.2); z-index: 1;">
-                    <i class="fas fa-gift"></i>
-                </div>
-            </section>
-            
-            <!-- Step 2: Share Action -->
-            <section id="step2" class="share-action-container">
-                <button class="share-btn" id="shareButton">
-                    <i class="fas fa-share-alt"></i> SHARE WITH FRIENDS
-                </button>
-                
-                <div class="share-instructions">
-                    <h3>How to Get Your ₹100 Cash:</h3>
-                    <p><i class="fas fa-share-square"></i> Click the "SHARE WITH FRIENDS" button above</p>
-                    <p><i class="fas fa-user-friends"></i> Share the link with 5 friends on WhatsApp, Facebook, etc.</p>
-                    <p><i class="fas fa-mouse-pointer"></i> Ask your friends to click your shared link</p>
-                    <p><i class="fas fa-trophy"></i> After 5 friends click, you can claim ₹100 to your UPI</p>
-                </div>
-                
-                <div class="progress-container">
-                    <div class="progress-header">
-                        <h3>Friends Progress</h3>
-                        <div class="friends-count"><span id="friendsCount">0</span>/5</div>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar" id="progressBar">0%</div>
-                    </div>
-                    
-                    <div class="friends-visual">
-                        <div class="friend-item" id="friend1">
-                            <div class="friend-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="friend-name">Friend 1</div>
-                        </div>
-                        <div class="friend-item" id="friend2">
-                            <div class="friend-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="friend-name">Friend 2</div>
-                        </div>
-                        <div class="friend-item" id="friend3">
-                            <div class="friend-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="friend-name">Friend 3</div>
-                        </div>
-                        <div class="friend-item" id="friend4">
-                            <div class="friend-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="friend-name">Friend 4</div>
-                        </div>
-                        <div class="friend-item" id="friend5">
-                            <div class="friend-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="friend-name">Friend 5</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Step 3: Processing -->
-            <section id="step3" class="processing-container">
-                <div class="processing-icon">
-                    <i class="fas fa-cog"></i>
-                </div>
-                <div class="processing-title">Processing Your Request</div>
-                <div class="processing-text">
-                    We are verifying that your 5 friends have clicked the shared link.<br>
-                    This usually takes just a few moments...
-                </div>
-                
-                <div class="processing-stats">
-                    <div class="stat-box">
-                        <div class="stat-value" id="processedCount">0</div>
-                        <div class="stat-label">Friends Verified</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value" id="timeRemaining">10s</div>
-                        <div class="stat-label">Time Remaining</div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Step 4: UPI Form -->
-            <section id="step4" class="upi-container">
-                <div class="upi-header">
-                    <h2 class="upi-title">Claim Your ₹100 Prize!</h2>
-                    <p class="upi-subtitle">Enter your UPI details to receive your cash reward</p>
-                </div>
-                
-                <div class="upi-form">
-                    <div class="form-group">
-                        <label for="upiId" class="form-label">
-                            <i class="fas fa-money-bill-wave"></i> UPI ID
-                        </label>
-                        <input type="text" id="upiId" class="form-input" placeholder="yourname@upi" required>
-                        <div class="upi-examples">Examples: name@oksbi, 9876543210@ybl, name@paytm</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="fullName" class="form-label">
-                            <i class="fas fa-user"></i> Full Name
-                        </label>
-                        <input type="text" id="fullName" class="form-input" placeholder="Enter your full name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="phone" class="form-label">
-                            <i class="fas fa-phone"></i> Phone Number
-                        </label>
-                        <input type="tel" id="phone" class="form-input" placeholder="Enter your 10-digit mobile number" required>
-                    </div>
-                    
-                    <button class="submit-btn" id="submitUpiBtn">
-                        <i class="fas fa-gift"></i> CLAIM ₹100 NOW
-                    </button>
-                </div>
-            </section>
-            
-            <!-- Step 5: Success -->
-            <section id="step5" class="success-container">
-                <div class="success-icon">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <h2 class="success-title">Success! ₹100 Claimed</h2>
-                <div class="success-message">
-                    <p>Congratulations! Your ₹100 cash prize has been successfully claimed.</p>
-                    <p>The money will be transferred to your UPI ID within <strong>24 hours</strong>.</p>
-                    <p>You will receive a notification when the transaction is completed.</p>
-                </div>
-                
-                <div class="timer-container">
-                    <div class="timer-title">Money will arrive in:</div>
-                    <div class="timer" id="countdownTimer">24:00:00</div>
-                </div>
-            </section>
-            
-            <!-- App Steps Indicator -->
-            <div class="app-steps">
-                <div class="step-dot active" data-step="1"></div>
-                <div class="step-dot" data-step="2"></div>
-                <div class="step-dot" data-step="3"></div>
-                <div class="step-dot" data-step="4"></div>
-                <div class="step-dot" data-step="5"></div>
-            </div>
+    <div class="card">
+      <h3>🚀 Boost Dashboard</h3>
+      
+      <div class="stats-grid">
+        <div class="stat-box status">
+          <div class="stat-number">Online</div>
+          <div class="stat-label">Server Status</div>
         </div>
+        <div class="stat-box rate">
+          <div class="stat-number">99.9%</div>
+          <div class="stat-label">Success Rate</div>
+        </div>
+      </div>
+
+      <div class="settings-area">
+        <label for="channelLink">Target Channel Link</label>
+        <input type="text" id="channelLink" placeholder="https://youtube.com/channel/...">
         
-        <!-- App Footer -->
-        <footer class="app-footer">
-            <p>This is a promotional offer. Prize distribution subject to verification.</p>
-            <p>Contact: support@win100cash.com | Terms & Conditions Apply</p>
-        </footer>
+        <label for="serviceType">Select Service</label>
+        <select id="serviceType">
+          <option value="subs">💎 100 Subscribers</option>
+          <option value="views">👁️ 1,000 Views</option>
+          <option value="likes">👍 500 Likes</option>
+        </select>
+      </div>
+
+      <div class="loader" id="loader">
+        <div class="loader-bar" id="loaderBar"></div>
+      </div>
+
+      <button id="increaseBtn">Start Boost ⚡</button>
+      
+      <div id="message"></div>
+      <div id="timer" class="timer"></div>
     </div>
 
-    <script>
-        // DOM Elements for Prompt
-        const promptOverlay = document.getElementById('promptOverlay');
-        const acceptPrompt = document.getElementById('acceptPrompt');
-        const declinePrompt = document.getElementById('declinePrompt');
-        const appContainer = document.getElementById('appContainer');
-        
-        // DOM Elements for App
-        const shareButton = document.getElementById('shareButton');
-        const friendsCount = document.getElementById('friendsCount');
-        const progressBar = document.getElementById('progressBar');
-        const step2 = document.getElementById('step2');
-        const step3 = document.getElementById('step3');
-        const step4 = document.getElementById('step4');
-        const step5 = document.getElementById('step5');
-        
-        const friendItems = [
-            document.getElementById('friend1'),
-            document.getElementById('friend2'),
-            document.getElementById('friend3'),
-            document.getElementById('friend4'),
-            document.getElementById('friend5')
-        ];
-        
-        const processedCount = document.getElementById('processedCount');
-        const timeRemaining = document.getElementById('timeRemaining');
-        const submitUpiBtn = document.getElementById('submitUpiBtn');
-        const countdownTimer = document.getElementById('countdownTimer');
-        const stepDots = document.querySelectorAll('.step-dot');
-        
-        // State variables
-        let sharedCount = 0;
-        let verifiedCount = 0;
-        let isProcessing = false;
-        let countdownInterval;
-        
-        // Prompt Event Listeners
-        acceptPrompt.addEventListener('click', function() {
-            // Hide prompt and show app
-            promptOverlay.style.display = 'none';
-            appContainer.style.display = 'block';
-            
-            // Auto-start the app process after a brief delay
-            setTimeout(() => {
-                // Show a welcome message
-                alert("🎉 Welcome! Let's get you ₹100!");
-                
-                // Auto-start the sharing process
-                setTimeout(() => {
-                    shareButton.click();
-                    
-                    // Auto-click a few more times to demonstrate
-                    setTimeout(() => shareButton.click(), 800);
-                    setTimeout(() => shareButton.click(), 1600);
-                    setTimeout(() => shareButton.click(), 2400);
-                    setTimeout(() => shareButton.click(), 3200);
-                }, 1000);
-            }, 500);
-        });
-        
-        declinePrompt.addEventListener('click', function() {
-            // Show a message and close prompt
-            alert("You're missing out on ₹100! Come back if you change your mind.");
-            promptOverlay.style.display = 'none';
-            
-            // Still show the app but with a message
-            appContainer.style.display = 'block';
-            
-            // Show a message on the app
-            setTimeout(() => {
-                alert("Changed your mind? You can still participate and win ₹100!");
-            }, 1000);
-        });
-        
-        // Initialize step indicators
-        function updateStepIndicator(step) {
-            stepDots.forEach((dot, index) => {
-                if (index + 1 <= step) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
-        
-        // Share button click handler
-        shareButton.addEventListener('click', function() {
-            if (sharedCount >= 5) return;
-            
-            // Increment share count
-            sharedCount++;
-            friendsCount.textContent = sharedCount;
-            
-            // Update progress bar
-            const progressPercent = Math.min((sharedCount / 5) * 100, 100);
-            progressBar.style.width = `${progressPercent}%`;
-            progressBar.textContent = `${Math.round(progressPercent)}%`;
-            
-            // Activate friend item
-            if (sharedCount <= 5) {
-                friendItems[sharedCount - 1].classList.add('active');
-                
-                // Add animation to the activated friend
-                friendItems[sharedCount - 1].style.animation = 'fadeIn 0.5s ease';
-            }
-            
-            // Update button text
-            if (sharedCount < 5) {
-                shareButton.innerHTML = `<i class="fas fa-share-alt"></i> SHARE MORE (${sharedCount}/5)`;
-            } else {
-                shareButton.innerHTML = `<i class="fas fa-check"></i> SHARED WITH 5 FRIENDS!`;
-                shareButton.style.background = "linear-gradient(to right, #4CAF50, #8BC34A)";
-                shareButton.disabled = true;
-                
-                // Move to processing step after delay
-                setTimeout(() => {
-                    step2.style.display = 'none';
-                    step3.style.display = 'block';
-                    updateStepIndicator(3);
-                    startProcessing();
-                }, 1500);
-            }
-        });
-        
-        // Start processing simulation
-        function startProcessing() {
-            isProcessing = true;
-            verifiedCount = 0;
-            processedCount.textContent = verifiedCount;
-            
-            // Simulate processing time
-            let timeLeft = 10;
-            timeRemaining.textContent = `${timeLeft}s`;
-            
-            const timeInterval = setInterval(() => {
-                timeLeft--;
-                timeRemaining.textContent = `${timeLeft}s`;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timeInterval);
-                    timeRemaining.textContent = "0s";
-                }
-            }, 1000);
-            
-            // Simulate friends verification
-            const verifyInterval = setInterval(() => {
-                verifiedCount++;
-                processedCount.textContent = verifiedCount;
-                
-                // When all 5 friends are verified
-                if (verifiedCount >= 5) {
-                    clearInterval(verifyInterval);
-                    isProcessing = false;
-                    
-                    // Move to UPI form after delay
-                    setTimeout(() => {
-                        step3.style.display = 'none';
-                        step4.style.display = 'block';
-                        updateStepIndicator(4);
-                    }, 1500);
-                }
-            }, 1500);
-        }
-        
-        // UPI form submission
-        submitUpiBtn.addEventListener('click', function() {
-            const upiId = document.getElementById('upiId').value.trim();
-            const fullName = document.getElementById('fullName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            
-            // Simple validation
-            if (!upiId || !fullName || !phone) {
-                alert("Please fill in all fields to claim your prize!");
-                return;
-            }
-            
-            // Validate UPI ID format
-            if (!upiId.includes('@')) {
-                alert("Please enter a valid UPI ID (e.g., yourname@upi)");
-                return;
-            }
-            
-            // Validate phone number
-            if (phone.length !== 10 || isNaN(phone)) {
-                alert("Please enter a valid 10-digit phone number");
-                return;
-            }
-            
-            // Show success message
-            step4.style.display = 'none';
-            step5.style.display = 'block';
-            updateStepIndicator(5);
-            
-            // Start 24-hour countdown
-            start24HourCountdown();
-        });
-        
-        // Start 24-hour countdown timer
-        function start24HourCountdown() {
-            let hours = 24;
-            let minutes = 0;
-            let seconds = 0;
-            
-            // Update immediately
-            updateCountdownDisplay(hours, minutes, seconds);
-            
-            // Update every second
-            countdownInterval = setInterval(() => {
-                seconds--;
-                
-                if (seconds < 0) {
-                    seconds = 59;
-                    minutes--;
-                    
-                    if (minutes < 0) {
-                        minutes = 59;
-                        hours--;
-                        
-                        if (hours < 0) {
-                            // Countdown finished
-                            clearInterval(countdownInterval);
-                            countdownTimer.textContent = "00:00:00";
-                            countdownTimer.style.color = "#4CAF50";
-                            
-                            // Show completion message
-                            setTimeout(() => {
-                                alert("🎉 Your ₹100 has been transferred to your UPI account!");
-                            }, 500);
-                            return;
-                        }
-                    }
-                }
-                
-                updateCountdownDisplay(hours, minutes, seconds);
-            }, 1000);
-        }
-        
-        // Update countdown display
-        function updateCountdownDisplay(hours, minutes, seconds) {
-            const formattedHours = hours.toString().padStart(2, '0');
-            const formattedMinutes = minutes.toString().padStart(2, '0');
-            const formattedSeconds = seconds.toString().padStart(2, '0');
-            
-            countdownTimer.textContent = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-        }
-        
-        // Initialize with step indicators
-        updateStepIndicator(1);
-    </script>
+    <div class="card">
+      <h3>⚙️ Personalize</h3>
+      <div class="settings-area">
+        <label for="nameInput">Your Nickname</label>
+        <input type="text" id="nameInput" placeholder="Enter your name">
+        <button id="saveNameBtn">Update Profile</button>
+      </div>
+    </div>
+  </div>
 
-    <!-- External Script Added Right Above Closing Body Tag -->
-    <script src="https://fibredelivery.com/60/19/f4/6019f42632eb933782f3ba1615af0aa4.js"></script>
+  <script>
+    // --- Elements ---
+    const increaseBtn = document.getElementById('increaseBtn');
+    const messageDiv = document.getElementById('message');
+    const timerDiv = document.getElementById('timer');
+    const loader = document.getElementById('loader');
+    const loaderBar = document.getElementById('loaderBar');
+    const themeBtn = document.getElementById('themeBtn');
+    const nameInput = document.getElementById('nameInput');
+    const saveNameBtn = document.getElementById('saveNameBtn');
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    const serviceType = document.getElementById('serviceType');
+
+    const LOCK_TIME = 24 * 60 * 60 * 1000; // 24 hours
+
+    // --- Init ---
+    function init() {
+      const savedName = localStorage.getItem('userName');
+      if (savedName) {
+        userNameDisplay.textContent = `Hi, ${savedName}`;
+        nameInput.value = savedName;
+      }
+      const isDark = localStorage.getItem('darkMode') === 'true';
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+        themeBtn.textContent = '☀️ Light';
+      }
+      checkLock();
+    }
+
+    // --- Theme ---
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      themeBtn.textContent = isDark ? '☀️ Light' : '🌙 Dark';
+      localStorage.setItem('darkMode', isDark);
+    });
+
+    // --- Profile ---
+    saveNameBtn.addEventListener('click', () => {
+      const name = nameInput.value.trim();
+      if(name) {
+        localStorage.setItem('userName', name);
+        userNameDisplay.textContent = `Hi, ${name}`;
+        const originalText = saveNameBtn.innerText;
+        saveNameBtn.innerText = "Saved! ✓";
+        saveNameBtn.style.background = "var(--success)";
+        setTimeout(() => {
+             saveNameBtn.innerText = originalText;
+             saveNameBtn.style.background = "";
+        }, 2000);
+      }
+    });
+
+    // --- Boost Logic ---
+    function checkLock() {
+      const lockUntil = Number(localStorage.getItem('lockUntil'));
+      if (lockUntil && Date.now() < lockUntil) {
+        increaseBtn.disabled = true;
+        increaseBtn.textContent = "Locked for 24h 🔒";
+        increaseBtn.style.background = "";
+        startTimer(lockUntil);
+      } else {
+        localStorage.removeItem('lockUntil');
+        increaseBtn.disabled = false;
+        increaseBtn.textContent = "Start Boost ⚡";
+        timerDiv.style.display = 'none';
+      }
+    }
+
+    function startTimer(lockUntil) {
+      timerDiv.style.display = 'block';
+      function update() {
+        const remaining = lockUntil - Date.now();
+        if (remaining <= 0) {
+          checkLock();
+          return;
+        }
+        const h = Math.floor(remaining / (1000 * 60 * 60));
+        const m = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((remaining % (1000 * 60)) / 1000);
+        timerDiv.textContent = `Please wait: ${h}h ${m}m ${s}s before next boost.`;
+        requestAnimationFrame(update);
+      }
+      update();
+    }
+
+    increaseBtn.addEventListener('click', () => {
+      const link = document.getElementById('channelLink').value.trim();
+      if (!link) {
+        alert('Please paste your channel link first');
+        document.getElementById('channelLink').focus();
+        return;
+      }
+      increaseBtn.disabled = true;
+      increaseBtn.textContent = "Connecting to server...";
+      increaseBtn.style.background = "#999";
+      loader.style.display = 'block';
+      messageDiv.innerHTML = '';
+      timerDiv.style.display = 'none';
+      let progress = 0;
+
+      const interval = setInterval(() => {
+        progress += Math.random() * 15;
+        if(progress > 100) progress = 100;
+        loaderBar.style.width = progress + '%';
+
+        if(progress === 100) {
+          clearInterval(interval);
+          setTimeout(finishBoost, 500);
+        }
+      }, 150);
+    });
+
+    function finishBoost() {
+      let serviceText = serviceType.options[serviceType.selectedIndex].text;
+      serviceText = serviceText.substring(serviceText.indexOf(' ') + 1);
+      messageDiv.innerHTML = `<div class="success">🎉 Success! Sending ${serviceText} now.</div>`;
+      loader.style.display = 'none';
+      loaderBar.style.width = '0%';
+      const lockUntil = Date.now() + LOCK_TIME;
+      localStorage.setItem('lockUntil', lockUntil);
+      checkLock();
+    }
+
+    init();
+  </script>
 </body>
 </html>
